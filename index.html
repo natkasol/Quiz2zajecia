@@ -1,0 +1,182 @@
+# Quiz2zajecia
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz: Teorie Emocji</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f8;
+      padding: 2em;
+      color: #333;
+    }
+    .quiz-container {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 2em;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1em;
+    }
+    .question {
+      font-weight: bold;
+      margin-top: 1em;
+    }
+    .answers button {
+      display: block;
+      margin: 0.5em 0;
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      background-color: #eee;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .answers button:hover {
+      background-color: #d0e6ff;
+    }
+    .answers button.correct {
+      background-color: #c8f7c5;
+    }
+    .answers button.incorrect {
+      background-color: #f7c5c5;
+    }
+    #next-btn {
+      margin-top: 1em;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      background-color: #4caf50;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      display: none;
+    }
+    #score {
+      font-size: 20px;
+      text-align: center;
+      margin-top: 2em;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Quiz: Teorie Emocji</h1>
+    <div id="quiz">
+      <div class="question" id="question"></div>
+      <div class="answers" id="answers"></div>
+      <button id="next-btn">Następne pytanie</button>
+    </div>
+    <div id="score"></div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "Która teoria mówi, że emocja to efekt interpretacji własnych reakcji ciała?",
+        answers: ["Cannona-Barda", "Schachtera-Singera", "Jamesa-Langego", "Ekmana"],
+        correct: 2
+      },
+      {
+        question: "Co twierdzi teoria Cannona-Barda o kolejności reakcji emocjonalnych?",
+        answers: ["Reakcja ciała poprzedza emocję", "Emocja poprzedza reakcję", "Zachodzą równolegle", "Są niezależne"],
+        correct: 2
+      },
+      {
+        question: "Jakie dwa komponenty składają się na emocję wg Schachtera-Singera?",
+        answers: ["Interpretacja i zachowanie", "Mimika i pamięć", "Pobudzenie i ocena", "Wyraz i działanie"],
+        correct: 2
+      },
+      {
+        question: "Co to jest ocena pierwotna wg Lazarusa?",
+        answers: ["Ocena własnych emocji", "Ocena znaczenia bodźca", "Ocena wyrazu mimicznego", "Ocena zasobów poznawczych"],
+        correct: 1
+      },
+      {
+        question: "Jakie struktury mózgu są najważniejsze w regulacji emocji?",
+        answers: ["Móżdżek i pień mózgu", "Hipokamp i jądro ogoniaste", "Ciało migdałowate i kora przedczołowa", "Wzgórze i pień mózgu"],
+        correct: 2
+      },
+      {
+        question: "Kto wyróżnił emocje uniwersalne?",
+        answers: ["Darwin", "Ekman", "Lazarus", "Schachter"],
+        correct: 1
+      },
+      {
+        question: "Jakie są emocje podstawowe według Ekmana?",
+        answers: ["Złość, smutek, nuda", "Strach, złość, zaskoczenie", "Miłość, zazdrość, radość", "Gniew, lęk, współczucie"],
+        correct: 1
+      },
+      {
+        question: "Jaką funkcję przypisuje emocjom Darwin?",
+        answers: ["Społeczną", "Duchową", "Estetyczną", "Adaptacyjną"],
+        correct: 3
+      },
+      {
+        question: "Która teoria podkreśla znaczenie interpretacji sytuacji?",
+        answers: ["Jamesa-Langego", "Schachtera-Singera", "Cannona-Barda", "Ekmana"],
+        correct: 1
+      }
+    ];
+
+    const questionEl = document.getElementById('question');
+    const answersEl = document.getElementById('answers');
+    const nextBtn = document.getElementById('next-btn');
+    const scoreEl = document.getElementById('score');
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function showQuestion(index) {
+      const q = quizData[index];
+      questionEl.textContent = q.question;
+      answersEl.innerHTML = '';
+      q.answers.forEach((ans, i) => {
+        const btn = document.createElement('button');
+        btn.textContent = ans;
+        btn.onclick = () => handleAnswer(i);
+        answersEl.appendChild(btn);
+      });
+    }
+
+    function handleAnswer(selected) {
+      const buttons = answersEl.querySelectorAll('button');
+      buttons.forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === quizData[currentQuestion].correct) {
+          btn.classList.add('correct');
+        } else if (i === selected) {
+          btn.classList.add('incorrect');
+        }
+      });
+      if (selected === quizData[currentQuestion].correct) score++;
+      nextBtn.style.display = 'block';
+    }
+
+    nextBtn.onclick = () => {
+      currentQuestion++;
+      if (currentQuestion < quizData.length) {
+        showQuestion(currentQuestion);
+        nextBtn.style.display = 'none';
+      } else {
+        showScore();
+      }
+    };
+
+    function showScore() {
+      quizEl = document.getElementById('quiz');
+      quizEl.style.display = 'none';
+      scoreEl.innerHTML = `<strong>Twój wynik: ${score} / ${quizData.length}</strong>`;
+    }
+
+    showQuestion(currentQuestion);
+  </script>
+</body>
+</html>
